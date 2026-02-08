@@ -3,7 +3,7 @@ Description=A plain text-based spaced repetition system
 
 [Service]
 Type=simple
-Restart=on-failure
+Restart=always
 ExecStart=%h/.nix-profile/bin/hashcards drill --open-browser false %h/src/github.com/timka/zh-cards
 
 [Install]
