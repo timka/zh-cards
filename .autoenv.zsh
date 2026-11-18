@@ -16,6 +16,10 @@ gen() {
 alias gen-words='gen words'
 alias gen-extra-words='gen extra-words'
 
+print-cards() {
+  uv run --script "$_ZH_CARDS_ROOT/print-cards.py" "$@"
+}
+
 gen-card() {
   local zh="${1:?}"
   local pinyin="${2:?}"
