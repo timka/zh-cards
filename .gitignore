@@ -1,2 +1,6 @@
 *.db
 *.md
+*.pdf
+*.png
+*.pyc
+__pycache__

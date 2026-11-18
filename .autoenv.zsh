@@ -1,18 +1,16 @@
+_ZH_CARDS_ROOT=${${(%):-%N}:A:h}
+
 gen() {
   local source=${1:?}
   local lang=${2:?}
   shift 2
-  for dir in $@ ; do
-    paste \
-      -d'|' \
-      $dir/$source.{zh,pinyin,$lang} \
-    | while IFS="|" read -r zh pinyin other; do
-        [ -z "$zh" -o -z "${pinyin}" -o -z "$other" ] && {
-          continue
-        }
-        gen-card "$zh" "$pinyin" "$other"
-    done
+  local dir
+  local -a files
+  (( $# )) || set -- .
+  for dir in "$@" ; do
+    files+=("$dir/$source.tsv")
   done
+  uv run --script "$_ZH_CARDS_ROOT/gen-cards.py" --lang "$lang" "${files[@]}"
 }
 
 alias gen-words='gen words'
@@ -35,13 +33,6 @@ ${other}
 
 EOF
 }
-alias ru-gen-1-words='for i in 1/* ; do gen-words ru $i > Lesson-${i:t}.md ; done'
-alias ru-gen-2-words='for i in 2/* ; do gen-words ru $i > Lesson-${i:t}.md ; done'
-alias ru-gen-我一定要找到她…-words='gen-words ru > 我一定要找到她….md'
-alias start='systemctl --user start hashcards.service'
-alias stop='systemctl --user stop hashcards.service'
-alias status='systemctl --user status hashcards.service'
-alias restart='systemctl --user restart hashcards.service'
-alias atus=status
-alias art=start
-alias logs='journalctl --user --unit hashcards.service'
+alias ru-gen-1-words='for i in "$_ZH_CARDS_ROOT"/1/* ; do gen-words ru "$i" > Lesson-${i:t}.md ; done'
+alias ru-gen-2-words='for i in "$_ZH_CARDS_ROOT"/2/* ; do gen-words ru "$i" > Lesson-${i:t}.md ; done'
+alias ru-gen-我一定要找到她…-words='gen-words ru "$_ZH_CARDS_ROOT/我一定要找到她…" > 我一定要找到她….md'
