@@ -1,5 +1,7 @@
 *.db
 *.md
+!AGENTS.md
+!README.md
 *.pdf
 *.png
 *.pyc
